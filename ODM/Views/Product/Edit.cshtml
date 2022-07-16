@@ -1,0 +1,125 @@
+﻿@model ODM.Models.Product
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<style>
+    .product-edit__header {
+        color: #3E8CF2;
+    }
+
+    .product-edit__container {
+        width: 50%;
+        margin: 40px auto 20px;
+    }
+
+    .product-edit__control {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 20px;
+    }
+
+    .product-edit__control > .control-label {
+        font-size: 18px;
+    }
+
+    .product-edit__control > .control-label::after {
+        content: ":";
+    }
+
+    .product-edit__control > div {
+        width: 70%;
+    }
+
+    .product-edit__input {
+        width: 100%;
+        max-width: initial;
+    }
+
+    .product-edit__buttons {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .product-edit__buttons > * {
+        margin-left: 10px;
+        padding: 8px 32px;
+    }
+</style>
+
+<h2 class="product-edit__header">Edit Device</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="product-edit__container">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.id)
+
+        <div class="form-group product-edit__control">
+            @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control product-edit__input" } })
+                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group product-edit__control">
+            @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.description, new { @class = "form-control product-edit__input", @rows = 5 })
+                @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group product-edit__control" style="display:none;">
+            @Html.LabelFor(model => model.image, htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.image, new { htmlAttributes = new { @class = "form-control product-edit__input" } })
+                @Html.ValidationMessageFor(model => model.image, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group product-edit__control" style="display:none;">
+            @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.status)
+                    @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group product-edit__control">
+            @Html.LabelFor(model => model.category_id, htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-10">
+                @Html.DropDownList("category_id", (SelectList)ViewBag.Category, "Choose device category", new { @class = " product-edit__input" })
+                @Html.ValidationMessageFor(model => model.category_id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @if(ViewBag.Error!=null)
+         {
+        <div class="form-group">
+            <div class="alert alert-danger">
+                <strong>@ViewBag.Error</strong>
+            </div>
+        </div>
+        }
+        @if(ViewBag.Success != null)
+        {
+        <div class="form-group">
+            <div class="alert alert-success">
+                <strong>@ViewBag.Success</strong>
+            </div>
+        </div>
+        }
+    <div class="form-group product-edit__buttons">
+        <input type="submit" value="Save" class="btn btn-primary" />
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-primary" })
+
+    </div>
+    </div>
+}

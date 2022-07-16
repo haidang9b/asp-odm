@@ -1,0 +1,171 @@
+﻿@model ODM.Models.User
+
+@{
+    ViewBag.Title = "Detail " + @Html.DisplayFor(model => model.fullName);
+}
+
+<style>
+    .user-detail__header {
+        color: #3E8CF2;
+    }
+
+    .user-detail__img {
+        object-fit: cover;
+    }
+
+    .user-detail__container {
+        width: 70%;
+        margin: 40px;
+        display: flex;
+    }
+
+    .user-detail__left {
+        padding-right: 62px;
+        border-right: 1px solid black;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .user-detail__left button {
+            margin-top: 16px;
+        }
+
+    .user-detail__right {
+        margin-left: 48px;
+        flex: 1;
+    }
+
+    .user-detail__picture {
+        width: 250px;
+        height: 300px;
+        object-fit: cover;
+    }
+
+    .user-detail__control {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 20px;
+    }
+
+    .user-detail__control {
+        font-size: 18px;
+    }
+
+    .user-detail__control--role > p {
+        text-transform: capitalize;
+    }
+
+    .user-detail__control > p::after {
+        content: ":";
+    }
+
+    .user-detail__control-content {
+        width: 70%;
+        padding: 12px;
+        border: 0.5px solid #000000;
+        border-radius: 2px;
+    }
+
+    .user-detail__buttons {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .user-detail__back {
+        padding: 8px 32px;
+    }
+
+    .user-detail__buttons {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+        .user-detail__buttons > * {
+            margin-left: 16px;
+        }
+
+    .user-detail__button {
+        padding: 8px 24px;
+    }
+</style>
+
+<h2 class="user-detail__header">Detail information</h2>
+
+<div class="user-detail__container">
+    <div class="user-detail__left">
+        @if (Model.avatar != null)
+        {
+            <img src="@Html.DisplayFor(model => model.avatar)" alt="@Html.DisplayFor(model => model.fullName)" class="user-detail__picture">
+        }
+        else
+        {
+            <img src="~/Content/images/defaultuser.png" alt="@Html.DisplayFor(model => model.fullName)" class="user-detail__picture">
+        }
+
+    </div>
+
+    <div class="user-detail__right">
+        <div class="user-detail__control">
+            <p>
+                @Html.DisplayNameFor(model => model.fullName)
+
+            </p>
+            <div class="user-detail__control-content">
+                @Html.DisplayFor(model => model.fullName)
+            </div>
+        </div>
+
+        <div class="user-detail__control">
+            <p>
+                @Html.DisplayNameFor(model => model.gender)
+
+            </p>
+            <div class="user-detail__control-content">
+                @if (Model.gender)
+                {
+                    <label>Male</label>
+                }
+                else
+                {
+                    <label>Female</label>
+                }
+            </div>
+        </div>
+
+        <div class="user-detail__control">
+            <p>
+                @Html.DisplayNameFor(model => model.birthday)
+
+            </p>
+            <div class="user-detail__control-content">
+                @Html.DisplayFor(model => model.birthday)
+            </div>
+        </div>
+
+        <div class="user-detail__control">
+            <p>
+                @Html.DisplayNameFor(model => model.started)
+
+            </p>
+            <div class="user-detail__control-content">
+                @Html.DisplayFor(model => model.started)
+            </div>
+        </div>
+
+        <div class="user-detail__control user-detail__control--role">
+            <p>
+                @Html.DisplayNameFor(model => model.role)
+
+            </p>
+            <div class="user-detail__control-content">
+                @Html.DisplayFor(model => model.role.name)
+            </div>
+        </div>
+
+        <div class="user-detail__buttons">
+            @Html.ActionLink("Edit", "Edit", new { id = Model.id }, new { @class = "btn btn-primary user-detail__button" })
+            @Html.ActionLink("Back", "ListUser", null, new { @class = "btn btn-primary user-detail__button" })
+        </div>
+    </div>
+</div>

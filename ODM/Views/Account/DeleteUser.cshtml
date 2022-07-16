@@ -1,0 +1,181 @@
+﻿@model ODM.Models.User
+
+@{
+    ViewBag.Title = "Delete User";
+}
+
+<style>
+    .user-delete__header {
+        color: #3E8CF2;
+    }
+
+    .user-delete__img {
+        object-fit: cover;
+    }
+
+    .user-delete__container {
+        width: 70%;
+        margin: 40px;
+        display: flex;
+    }
+
+    .user-delete__left {
+        padding-right: 62px;
+        border-right: 1px solid black;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .user-delete__left button {
+        margin-top: 16px;
+    }
+
+    .user-delete__right {
+        margin-left: 48px;
+        flex: 1;
+    }
+
+    .user-delete__picture {
+        width: 250px;
+        height: 300px;
+        object-fit: cover;
+    }
+
+    .user-delete__control {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 20px;
+    }
+
+    .user-delete__control {
+        font-size: 18px;
+    }
+
+    .user-delete__control--role > p {
+        text-transform: capitalize;
+    }
+
+    .user-delete__control > p::after {
+        content: ":";
+    }
+
+    .user-delete__control-content {
+        width: 70%;
+        padding: 12px;
+        border: 0.5px solid #000000;
+        border-radius: 2px;
+    }
+
+    .user-delete__buttons {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .user-delete__back {
+        padding: 8px 32px;
+    }
+
+    .user-delete__buttons {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .user-delete__buttons > * {
+        margin-left: 16px;
+    }
+
+    .user-delete__button {
+        padding: 8px 24px;
+    }
+</style>
+
+<h2 class="user-delete__header">Delete User</h2>
+
+<div class="user-delete__container">
+    <div class="user-delete__left">
+        @if (Model.avatar != null)
+        {
+            <img src="@Html.DisplayFor(model => model.avatar)" alt="@Html.DisplayFor(model => model.fullName)" class="user-delete__picture">
+        }
+        else
+        {
+            <img src="~/Content/images/defaultuser.png" alt="@Html.DisplayFor(model => model.fullName)" class="user-delete__picture">
+        }
+
+    </div>
+
+    <div class="user-delete__right">
+        <div class="user-delete__control">
+            <p>
+                @Html.DisplayNameFor(model => model.fullName)
+
+            </p>
+            <div class="user-delete__control-content">
+                @Html.DisplayFor(model => model.fullName)
+            </div>
+        </div>
+
+        <div class="user-delete__control">
+            <p>
+                @Html.DisplayNameFor(model => model.gender)
+
+            </p>
+            <div class="user-delete__control-content">
+                @if (Model.gender)
+                {
+                    <label>Male</label>
+                }
+                else
+                {
+                    <label>Female</label>
+                }
+            </div>
+        </div>
+
+        <div class="user-delete__control">
+            <p>
+                @Html.DisplayNameFor(model => model.birthday)
+
+            </p>
+            <div class="user-delete__control-content">
+                @Html.DisplayFor(model => model.birthday)
+            </div>
+        </div>
+
+        <div class="user-delete__control">
+            <p>
+                @Html.DisplayNameFor(model => model.started)
+
+            </p>
+            <div class="user-delete__control-content">
+                @Html.DisplayFor(model => model.started)
+            </div>
+        </div>
+
+        <div class="user-delete__control user-delete__control--role">
+            <p>
+                @Html.DisplayNameFor(model => model.role)
+
+            </p>
+            <div class="user-delete__control-content">
+                @Html.DisplayFor(model => model.role.name)
+            </div>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <!-- <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>-->
+
+            <div class="user-delete__buttons">
+                <input type="submit" value="Delete" class="btn btn-primary" />
+                @Html.ActionLink("Back", "ListUser", null, new { @class = "btn user-delete__button" })
+            </div>
+        }
+    </div>
+    </div>

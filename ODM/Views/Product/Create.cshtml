@@ -1,0 +1,137 @@
+﻿@model ODM.Models.Product
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+    .product-create__header {
+        color: #3E8CF2;
+    }
+
+    .product-create__container {
+        width: 50%;
+        margin: 40px auto 20px;
+    }
+
+    .product-create__control {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 20px;
+    }
+
+    .product-create__control > .control-label {
+        font-size: 18px;
+    }
+
+    .product-create__control > .control-label::after {
+        content: ":";
+    }
+
+    .product-create__control > div {
+        width: 70%;
+    }
+
+    .product-create__input {
+        width: 100%;
+        max-width: initial;
+    }
+
+    .custom-file-label {
+        color: #3E86E8;
+    }
+
+    .custom-file-label::after {
+        content: '';
+        display: none;
+    }
+
+    .product-create__buttons {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .product-create__buttons > * {
+        margin-left: 10px;
+        padding: 8px 32px;
+    }
+</style>
+
+<h2 class="product-create__header">Create New Device</h2>
+
+
+@using (Html.BeginForm("Create", "Product", FormMethod.Post,new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    
+<div class="product-create__container">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group product-create__control">
+        @Html.LabelFor(model => model.category_id, htmlAttributes: new { @class = "control-label" })
+        <div class="">
+            @Html.DropDownList("category_id", (IEnumerable<SelectListItem>)ViewData["category_id"], "Choose device category", new { @class = "form-control product-create__input" })
+            @Html.ValidationMessageFor(model => model.category_id, null, new { @class = "text-danger" })
+
+        </div>
+    </div>
+
+    <div class="form-group product-create__control">
+        @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label" })
+        <div class="">
+            @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control product-create__input" } })
+            @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group product-create__control">
+        @Html.LabelFor(model => model.image, htmlAttributes: new { @class = "control-label" })
+        <div class="">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input  product-create__input" id="customFile" name="file" accept="image/*" />
+                <label class="custom-file-label" for="customFile">Choose from folder</label>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="form-group product-create__control">
+        @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label" })
+        <div class="">
+            @Html.TextAreaFor(model => model.description, new { @class = "form-control product-create__input", @rows = 5 })
+            @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group product-create__control">
+        @Html.LabelFor(model => model.installDay, htmlAttributes: new { @class = "control-label" })
+        <div class="">
+            <input name="installDay" id="installDay" type="date" placeholder="dd-mm-yyyy" value="2000-01-01"
+                   min="1997-01-01" max="2030-12-31" class="form-control product-create__input">
+            <!--<small id="emailHelp" class="form-text text-muted">Có dạng mm/dd/yyyy.</small>-->
+            @Html.ValidationMessageFor(model => model.installDay, null, new { @class = "text-danger" })
+
+        </div>
+    </div>
+
+
+    <div class="form-group product-create__control">
+        @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label " })
+        <div class="">
+            <input type="checkbox" id="status" name="status" />
+        </div>
+    </div>
+
+    <div class="form-group product-create__buttons">
+        <input type="submit" value="Save" class="btn btn-primary" />
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-primary" })
+    </div>
+</div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    
+}

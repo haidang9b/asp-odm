@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ODM.Models.Category>
+
+@{
+    ViewBag.Title = "Danh sách loại thiết bị";
+}
+
+<h2>Danh sách loại thiết bị</h2>
+
+<p>
+    @Html.ActionLink("Thêm loại thiết bị", "Create",null ,new { @class = "btn btn-primary" })
+</p>
+<div class="table">
+    <table class="display" id="tableCategory">
+        <thead>
+            <tr>
+                <th >
+                    @Html.DisplayNameFor(model => model.id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.name)
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.id)
+                    </td>
+
+                    <td>
+
+                        <a href="/Product/Index?category=@Html.DisplayFor(modelItem => item.id)">@Html.DisplayFor(modelItem => item.name)</a>
+                        
+                    </td>
+                    <td>
+                        @if (User.IsInRole("admin"))
+                        {
+                            @Html.ActionLink("Sửa", "Edit", new { id = item.id }, new { @class = "btn btn-warning" })
+                            @Html.ActionLink("Chi tiết", "Details", new { id = item.id }, new { @class = "btn btn-info" })
+                            @Html.ActionLink("Xóa", "Delete", new { id = item.id }, new { @class = "btn btn-danger" })
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+        
+
+    </table>
+</div>
+

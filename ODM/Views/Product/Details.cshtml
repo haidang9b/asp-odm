@@ -1,0 +1,132 @@
+﻿@model ODM.Models.Product
+
+@{
+    ViewBag.Title = "Detail " + Model.name;
+}
+
+<style>
+    .product-detail__header {
+        color: #3E8CF2;
+    }
+
+    .product-detail__img {
+        object-fit: cover;
+    }
+
+    .product-detail__container {
+        width: 50%;
+        margin: 40px auto 20px;
+    }
+
+    .product-detail__control {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 20px;
+    }
+
+    .product-detail__control > p {
+        font-size: 18px;
+    }
+
+    .product-detail__control > p::after {
+        content: ":";
+    }
+
+    .product-detail__control-content {
+        width: 70%;
+        padding: 12px;
+        border: 0.5px solid #000000;
+        border-radius: 2px;
+    }
+
+    .product-detail__buttons {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .product-detail__back {
+        padding: 8px 32px;
+    }
+</style>
+
+<h2 class="product-detail__header">Detail information</h2>
+
+<div class="product-detail__container">
+
+    <div class="product-detail__control">
+        <p>
+            @Html.DisplayNameFor(model => model.category_id)
+
+        </p>
+        <div class="product-detail__control-content">
+            @Html.DisplayFor(model => model.Category.name)
+        </div>
+    </div>
+
+    <div class="product-detail__control">
+        <p>
+            @Html.DisplayNameFor(model => model.name)
+
+        </p>
+        <div class="product-detail__control-content">
+            @Html.DisplayFor(model => model.name)
+        </div>
+    </div>
+
+    <div class="product-detail__control">
+        <p>
+            Image
+
+        </p>
+        <div class="product-detail__control-content">
+            <img src="@Html.DisplayFor(model => model.image)" alt="@Html.DisplayFor(model => model.name)" width="200" height="200" class="product-detail__img">
+        </div>
+    </div>
+
+    <div class="product-detail__control">
+        <p>
+            @Html.DisplayNameFor(model => model.description)
+
+        </p>
+        <div class="product-detail__control-content">
+            @Html.DisplayFor(model => model.description)
+        </div>
+    </div>
+
+    <div class="product-detail__control">
+        <p>
+            @Html.DisplayNameFor(model => model.status)
+
+        </p>
+        <div class="product-detail__control-content">
+            @if (Model.status == false)
+            {
+                <strong class="text-success">
+                    Available
+                </strong>
+            }
+            else
+            {
+                <strong class="text-danger">
+                    Borrowed
+                </strong>
+            }
+        </div>
+
+    </div>
+
+    <div class="product-detail__buttons">
+        @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-primary product-detail__back" })
+
+    </div>
+</div>
+
+
+<!--
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+    -->

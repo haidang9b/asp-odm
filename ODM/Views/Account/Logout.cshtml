@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "Logout";
+
+}
+
+<style>
+    .logout__container {
+        background-color: #F2F6FA;
+        min-height: 100vh;
+        width: 100%;
+    }
+
+    .logout__header {
+        padding-top: 24px;
+        display: flex;
+        align-items: baseline;
+    }
+
+    .logout__header-hl {
+        color: #3E8CF2;
+    }
+
+    .logout__header-suf {
+        margin-left: 12px;
+        font-size: 24px;
+    }
+
+    .logout__center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+        .logout__center > h3 {
+            color: #003580;
+            margin-bottom: 24px;
+        }
+
+        .logout__center > p {
+            color: #003580;
+            font-size: 20px;
+        }
+</style>
+
+<div class="logout__container">
+    <h2 class="logout__header">
+        <p class="logout__header-hl">Online Device</p>
+        <p class="logout__header-suf">Management</p>
+    </h2>
+
+    <div class="logout__center">
+        <h3>Logout</h3>
+        <p>You have been logged out. <a href="/Account/Login">Back to login</a> </p>
+    </div>
+</div>
+

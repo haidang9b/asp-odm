@@ -1,0 +1,213 @@
+﻿@model IEnumerable<ODM.Models.ViewModel.RequestViewModel>
+
+@{
+    ViewBag.Title = "History";
+}
+
+
+<style>
+    .history__heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .history__header {
+        color: #3E8CF2;
+    }
+
+    .history__total {
+        font-size: 18px;
+    }
+
+    .history__table {
+        border-left: 0.5px solid #ccc;
+        border-right: 0.5px solid #ccc;
+    }
+
+    .history__table tr {
+        background-color: white !important;
+    }
+
+    .history__table .sorting_1 {
+        background-color: white !important;
+    }
+
+    .history__table thead th {
+        background-color: #3E8CF2;
+    }
+
+    .history__table tbody td:first-child {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .history__table tbody td {
+        vertical-align: middle;
+        font-weight: 400;
+    }
+
+    #tableHistory_info {
+        display: none;
+    }
+
+    #tableHistory_paginate {
+        width: 100%;
+        float: left;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #tableHistory_paginate .paginate_button.current {
+        font-weight: bold;
+        border: 0;
+        background: 0;
+    }
+
+    #tableHistory_paginate .paginate_button.previous {
+        background-image: url("/Content/assets/chevron_left.svg");
+        background-repeat: no-repeat;
+        color: transparent !important;
+        width: 20px;
+        height: 20px;
+        background-position: center;
+        cursor: pointer;
+    }
+
+    #tableHistory_paginate .paginate_button.next {
+        background-image: url("/Content/assets/chevron_right.svg");
+        background-repeat: no-repeat;
+        color: transparent !important;
+        width: 20px;
+        height: 20px;
+        background-position: center;
+        cursor: pointer;
+    }
+</style>
+
+<div class="history__heading">
+    <div class="history__heading-left">
+        <h2 class="history__header">History</h2>
+        <p class="history__total">Total: <strong id="his_total">0</strong></p>
+    </div>
+</div>
+
+<div class="table">
+
+    <table class="display history__table" id="tableHistory">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.username)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.fullname)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.idProduct)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.nameProduct)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.timeRequest)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.timeCompletion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.isReturn)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.state)
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fullname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.idProduct)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nameProduct)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.timeRequest)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.timeCompletion)
+                    </td>
+                    <td>
+                        @if (item.isReturn)
+                        {
+                            <strong>Receive</strong>
+                        }
+                        else
+                        {
+                            <strong>Send</strong>
+                        }
+                    </td>
+                    <td>
+                        @if (item.state == 1)
+                        {
+                            <strong class="text-success">Done</strong>
+                        }
+                        else if (item.state == 0)
+                        {
+                            <strong class="text-warning">In progress</strong>
+                        }
+                        else
+                        {
+                            <strong class="text-danger">Cancel</strong>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+
+
+    </table>
+
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        function animateValue(id, start, end, duration) {
+            if (start === end) return;
+            var range = end - start;
+            var current = start;
+            var increment = end > start ? 1 : -1;
+            var stepTime = Math.abs(Math.floor(duration / range));
+            var obj = document.getElementById(id);
+            var timer = setInterval(function () {
+                current += increment;
+                obj.innerHTML = current;
+                if (current == end) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+        function setTotal() {
+            var oTable = $("#tableHistory").DataTable();
+            var info = oTable.page.info();
+            var count = info.recordsDisplay;
+            animateValue("his_total", -100, count, 100)
+        }
+
+        setTotal();
+    });
+</script>

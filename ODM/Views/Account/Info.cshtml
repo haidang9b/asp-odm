@@ -1,0 +1,196 @@
+﻿@model ODM.Models.User
+
+@{
+    ViewBag.Title = "Profile";
+}
+
+<style>
+    .user-profile__header {
+        color: #3E8CF2;
+    }
+
+    .user-profile__img {
+        object-fit: cover;
+    }
+
+    .user-profile__container {
+        width: 70%;
+        margin: 40px;
+        display: flex;
+    }
+
+    .user-profile__left {
+        padding-right: 62px;
+        border-right: 1px solid black;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .user-profile__left button {
+        margin-top: 16px;
+    }
+
+    .user-profile__right {
+        margin-left: 48px;
+        flex: 1;
+    }
+
+    .user-profile__picture {
+        width: 250px;
+        height: 300px;
+        object-fit: cover;
+    }
+
+    .user-profile__control {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 20px;
+    }
+
+    .user-profile__control > p {
+        font-size: 18px;
+    }
+
+    .user-profile__control > p::after {
+        content: ":";
+    }
+
+    .user-profile__control-content {
+        width: 70%;
+        padding: 12px;
+        border: 0.5px solid #000000;
+        border-radius: 2px;
+    }
+
+    .user-profile__buttons {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .user-profile__back {
+        padding: 8px 32px;
+    }
+
+    .user-profile__buttons {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .user-profile__buttons > * {
+        margin-left: 16px;
+    }
+
+    .user-profile__button {
+        padding: 8px 24px;
+    }
+
+    .user-profile__input {
+        width: 100%;
+        max-width: initial;
+    }
+</style>
+
+<h2 class="user-profile__header">Detail information</h2>
+
+<div class="user-profile__container">
+    <div class="user-profile__left">
+        @if (Model.avatar != null)
+        {
+            <img src="@Html.DisplayFor(model => model.avatar)" alt="@Html.DisplayFor(model => model.fullName)" class="user-profile__picture">
+        }
+        else
+        {
+            <img src="~/Content/images/defaultuser.png" alt="@Html.DisplayFor(model => model.fullName)" class="user-profile__picture">
+        }
+        <button class="btn btn-primary" data-toggle="modal" data-target="#updateAvatar">Change profile picture</button>
+    </div>
+
+    <div class="user-profile__right">
+        <div class="user-profile__control">
+            <p>
+                @Html.DisplayNameFor(model => model.fullName)
+
+            </p>
+            <div class="user-profile__control-content">
+                @Html.DisplayFor(model => model.fullName)
+            </div>
+        </div>
+
+        <div class="user-profile__control">
+            <p>
+                @Html.DisplayNameFor(model => model.gender)
+
+            </p>
+            <div class="user-profile__control-content">
+                @if (Model.gender)
+                {
+                    <label>Male</label>
+                }
+                else
+                {
+                    <label>Female</label>
+                }
+            </div>
+        </div>
+
+        <div class="user-profile__control">
+            <p>
+                @Html.DisplayNameFor(model => model.birthday)
+
+            </p>
+            <div class="user-profile__control-content">
+                @Html.DisplayFor(model => model.birthday)
+            </div>
+        </div>
+
+        <div class="user-profile__control">
+            <p>
+                @Html.DisplayNameFor(model => model.started)
+
+            </p>
+            <div class="user-profile__control-content">
+                @Html.DisplayFor(model => model.started)
+            </div>
+        </div>
+
+        <div class="user-profile__control">
+            <p>
+                @Html.DisplayNameFor(model => model.role)
+
+            </p>
+            <div class="user-profile__control-content">
+                @Html.DisplayFor(model => model.role.name)
+            </div>
+        </div>
+
+        <div class="user-profile__buttons">
+            @Html.ActionLink("Edit", "Edit", new { id = Model.id }, new { @class = "btn btn-primary user-profile__button" })
+            @Html.ActionLink("Back", "ListUser", null, new { @class = "btn btn-primary user-profile__button" })
+        </div>
+    </div>
+</div>
+<div class="modal" id="updateAvatar">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="text-align: center;">Change profile picture</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="area-avatar-update">
+                </div>
+                <div class="custom-file mb-3">
+                    <input type="file" class="form-control user-profile__input" id="avatar-upload" name="avatar" required accept="image/*" />
+                </div>
+                <div id="message-change-avatar">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" id='btn-upload-avatar'>Save</button>
+                <button type="button" class="btn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

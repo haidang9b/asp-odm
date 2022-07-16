@@ -1,0 +1,305 @@
+﻿@model IEnumerable<ODM.Models.ViewModel.BorrowViewModel>
+
+@{
+    ViewBag.Title = "Assignments";
+}
+
+<style>
+    .borrows__heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .borrows__header {
+        color: #3E8CF2;
+    }
+
+    .borrows__total {
+        font-size: 18px;
+    }
+
+    .borrows__table {
+        border-left: 0.5px solid #ccc;
+        border-right: 0.5px solid #ccc;
+    }
+
+        .borrows__table tr {
+            background-color: white !important;
+        }
+
+        .borrows__table .sorting_1 {
+            background-color: white !important;
+        }
+
+        .borrows__table thead th {
+            background-color: #3E8CF2;
+        }
+
+        .borrows__table tbody td:first-child {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .borrows__table tbody td {
+            vertical-align: middle;
+            font-weight: 400;
+        }
+
+    #tableBorrow_info {
+        display: none;
+    }
+
+    #tableBorrow_paginate {
+        width: 100%;
+        float: left;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        #tableBorrow_paginate .paginate_button.current {
+            font-weight: bold;
+            border: 0;
+            background: 0;
+        }
+
+        #tableBorrow_paginate .paginate_button.previous {
+            background-image: url("/Content/assets/chevron_left.svg");
+            background-repeat: no-repeat;
+            color: transparent !important;
+            width: 20px;
+            height: 20px;
+            background-position: center;
+            cursor: pointer;
+        }
+
+        #tableBorrow_paginate .paginate_button.next {
+            background-image: url("/Content/assets/chevron_right.svg");
+            background-repeat: no-repeat;
+            color: transparent !important;
+            width: 20px;
+            height: 20px;
+            background-position: center;
+            cursor: pointer;
+        }
+</style>
+
+<div class="borrows__heading">
+    <div class="borrows__heading-left">
+        <h2 class="borrows__header">Manage Assignments</h2>
+        <p class="borrows__total">Total: <strong id="borr_total">0</strong></p>
+    </div>
+</div>
+
+<div class="table">
+    <table class="display borrows__table" id="tableBorrow">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.username)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.fullname)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.nameProduct)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.timeReceive)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.timeReturn)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.isReturn)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            @foreach (var item in Model)
+            {
+                if (User.IsInRole("admin"))
+                {
+                    <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.username)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fullname)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.nameProduct)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.timeReceive)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.timeReturn)
+                            </td>
+                            <td>
+                                @if (item.isReturn)
+                                {
+                                    <strong class="text-success">Returned</strong>
+                                }
+                                else
+                                {
+                                    <strong class="text-warning">Not returned</strong>
+                                }
+                            </td>
+                            <td>
+                                @if (!item.isReturn && User.Identity.Name == item.username)
+                                {
+                                   
+                                        <button class="btn btn-warning btn-return-product" data-id="@item.id" data-username="@item.username"
+                                                data-fullname="@item.fullname" data-idproduct="@item.idProduct"
+                                                data-nameProduct="@item.nameProduct" data-time="@item.timeReceive">
+                                            Trả
+                                        </button>
+
+                                }
+                                <a class="btn button button__detail" href="/Product/Details/@item.idProduct">Thiết bị</a>
+                            </td>
+                    </tr>
+                }
+                else
+                {
+                    if (User.Identity.Name == item.username) { 
+                    <tr>
+                        <td>
+                                @Html.DisplayFor(modelItem => item.id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.username)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fullname)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.nameProduct)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.timeReceive)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.timeReturn)
+                            </td>
+                            <td>
+                                @if (item.isReturn)
+                                {
+                                <strong class="text-success">Returned</strong>
+                                }
+                                else
+                                {
+                                <strong class="text-warning">Not returned</strong>
+                                }
+                            </td>
+                            <td>
+                                @if (!item.isReturn)
+                                {
+                                    <button class="btn btn-warning btn-return-product" data-id="@item.id" data-username="@item.username"
+                                            data-fullname="@item.fullname" data-idproduct="@item.idProduct"
+                                            data-nameProduct="@item.nameProduct" data-time="@item.timeReceive">
+                                        Trả
+                                    </button>
+                                }
+                                <a class="btn button button__detail" href="/Product/Details/@item.idProduct">Thiết bị</a>
+                            </td>
+                    </tr>
+                    }
+                }
+            }
+            </tbody>
+       
+
+    </table>
+</div>
+
+
+
+<div class="modal" id="return-request">
+    <form id="form-request-return">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Yêu cầu trả thiết bị</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-10 form-group">
+                        <label for="username-return">Tên tài khoản</label>
+                        <input type="text" id="username-return" class="form-control" disabled />
+                    </div>
+
+                    <div class="col-md-10 form-group">
+                        <label for="fullname-return">Họ và tên</label>
+                        <input type="text" id="fullname-return" class="form-control" disabled />
+                    </div>
+
+                    <div class="col-md-10 form-group">
+                        <label for="id-product-return">Mã thiết bị</label>
+                        <input type="text" id="id-product-return" class="form-control" disabled />
+                    </div>
+
+                    <div class="col-md-10 form-group">
+                        <label for="name-product-return">Tên thiết bị</label>
+                        <input type="text" id="name-product-return" class="form-control" disabled />
+                    </div>
+
+                    <div class="col-md-10 form-group">
+                        <label for="time-receive-return">Thời gian mượn</label>
+                        <input type="text" id="time-receive-return" class="form-control" disabled />
+                    </div>
+
+                    <div class="col-md-10 form-group" id="error-return-request">
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <input type="hidden" id="id-borrow-return" disabled>
+                    <button type="button" class="btn btn-success" id="btn-return-submit">Yêu cầu trả</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        function animateValue(id, start, end, duration) {
+            if (start === end) return;
+            var range = end - start;
+            var current = start;
+            var increment = end > start ? 1 : -1;
+            var stepTime = Math.abs(Math.floor(duration / range));
+            var obj = document.getElementById(id);
+            var timer = setInterval(function () {
+                current += increment;
+                obj.innerHTML = current;
+                if (current == end) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        function setTotal() {
+            var oTable = $("#tableBorrow").DataTable();
+            var info = oTable.page.info();
+            var count = info.recordsDisplay;
+            animateValue("borr_total", -100, count, 100);
+        }
+
+        setTotal();
+});
+</script>

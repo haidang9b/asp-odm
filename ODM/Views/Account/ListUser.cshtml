@@ -1,0 +1,177 @@
+﻿@model IEnumerable<ODM.Models.User>
+
+@{
+    ViewBag.Title = "Users";
+}
+
+<style>
+    .users__heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .users__header {
+        color: #3E8CF2;
+    }
+
+    .users__total {
+        font-size: 18px;
+    }
+
+    .users__table {
+        border-left: 0.5px solid #ccc;
+        border-right: 0.5px solid #ccc;
+    }
+
+    .users__table tr {
+        background-color: white !important;
+    }
+
+    .users__table .sorting_1 {
+        background-color: white !important;
+    }
+
+    .users__table thead th {
+        background-color: #3E8CF2;
+    }
+
+    .users__table tbody td:first-child {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .users__table tbody td {
+        vertical-align: middle;
+        font-weight: 400;
+    }
+
+    #tableAccount_info {
+        display: none;
+    }
+
+    #tableAccount_paginate {
+        width: 100%;
+        float: left;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #tableAccount_paginate .paginate_button.current {
+        font-weight: bold;
+        border: 0;
+        background: 0;
+    }
+
+    #tableAccount_paginate .paginate_button.previous {
+        background-image: url("/Content/assets/chevron_left.svg");
+        background-repeat: no-repeat;
+        color: transparent !important;
+        width: 20px;
+        height: 20px;
+        background-position: center;
+        cursor: pointer;
+    }
+
+    #tableAccount_paginate .paginate_button.next {
+        background-image: url("/Content/assets/chevron_right.svg");
+        background-repeat: no-repeat;
+        color: transparent !important;
+        width: 20px;
+        height: 20px;
+        background-position: center;
+        cursor: pointer;
+    }
+</style>
+
+<div class="users__heading">
+    <div class="users__heading-left">
+        <h2 class="users__header">Manage Users</h2>
+        <p class="users__total">Total: <strong id="user_total">0</strong></p>
+    </div>
+    <p>
+        @Html.ActionLink("Create new user", "Add", null, new { @class = "btn btn-primary" })
+    </p>
+</div>
+<div class="table">
+    <table class="display users__table" id="tableAccount">
+        <thead>
+            <tr>
+                <th scope="col">
+                    ID
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.fullName)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.birthday)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.started)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.role_id)
+                </th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.id</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.birthday)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.started)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.role.name)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Sửa", "Edit", new { id = item.id }, new { @class = "btn button button__edit" })
+                        <!--@Html.ActionLink("Cấp lại", "EditUser", new { id = item.id }, new { @class = "btn btn" })-->
+                        @Html.ActionLink("Cấp lại", "EditUser", new { id = item.id }, new { @class = "btn button button__setting" })
+                        @Html.ActionLink("Xóa", "DeleteUser", new { id = item.id }, new { @class = "btn button button__delete" })
+                        @Html.ActionLink("Chi tiết", "Profile", new { id = item.id }, new { @class = "btn button button__detail" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        function animateValue(id, start, end, duration) {
+            if (start === end) return;
+            var range = end - start;
+            var current = start;
+            var increment = end > start ? 1 : -1;
+            var stepTime = Math.abs(Math.floor(duration / range));
+            var obj = document.getElementById(id);
+            var timer = setInterval(function () {
+                current += increment;
+                obj.innerHTML = current;
+                if (current == end) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+        function setTotal() {
+            var oTable = $("#tableAccount").DataTable();
+            var info = oTable.page.info();
+            var count = info.recordsDisplay;
+
+            animateValue("user_total",-100, count, 100);
+        }
+        setTotal();
+    });</script>

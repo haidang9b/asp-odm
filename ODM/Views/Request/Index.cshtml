@@ -1,0 +1,331 @@
+﻿@model IEnumerable<ODM.Models.ViewModel.RequestViewModel>
+
+@{
+    ViewBag.Title = "Requests";
+}
+
+<style>
+    .requests__heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .requests__header {
+        color: #3E8CF2;
+    }
+
+    .requests__total {
+        font-size: 18px;
+    }
+
+    .requests__table {
+        border-left: 0.5px solid #ccc;
+        border-right: 0.5px solid #ccc;
+    }
+
+    .requests__table tr {
+        background-color: white !important;
+    }
+
+    .requests__table .sorting_1 {
+        background-color: white !important;
+    }
+
+    .requests__table thead th {
+        background-color: #3E8CF2;
+    }
+
+    .requests__table tbody td:first-child {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .requests__table tbody td {
+        vertical-align: middle;
+        font-weight: 400;
+    }
+
+    #tableRequest_info {
+        display: none;
+    }
+
+    #tableRequest_paginate {
+        width: 100%;
+        float: left;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #tableRequest_paginate .paginate_button.current {
+        font-weight: bold;
+        border: 0;
+        background: 0;
+    }
+
+    #tableRequest_paginate .paginate_button.previous {
+        background-image: url("/Content/assets/chevron_left.svg");
+        background-repeat: no-repeat;
+        color: transparent !important;
+        width: 20px;
+        height: 20px;
+        background-position: center;
+        cursor: pointer;
+    }
+
+    #tableRequest_paginate .paginate_button.next {
+        background-image: url("/Content/assets/chevron_right.svg");
+        background-repeat: no-repeat;
+        color: transparent !important;
+        width: 20px;
+        height: 20px;
+        background-position: center;
+        cursor: pointer;
+    }
+</style>
+
+<div class="requests__heading">
+    <div class="requests__heading-left">
+        <h2 class="requests__header">Manage Requests</h2>
+        <p class="requests__total">Total: <strong id="req_total">0</strong></p>
+    </div>
+    <!--<p>
+        @Html.ActionLink("Create new request", "Create", null, new { @class = "btn btn-primary" })
+    </p>-->
+</div>
+<div class="table">
+    <table class="display requests__table" id="tableRequest">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.username)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.fullname)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.idProduct)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.nameProduct)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.timeRequest)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.isReturn)
+                </th>
+                <th></th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                if (User.IsInRole("user") && item.username == User.Identity.Name && item.timeCompletion == null)
+                {
+                    <tr id="@(String.Format("{0}{1}", item.id, "request"))">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.username)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.fullname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.idProduct)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.nameProduct)
+                        </td>
+                        <td>
+
+                            @Html.DisplayFor(modelItem => item.timeRequest)
+                        </td>
+                        <td>
+                            @if (@item.isReturn)
+                            {
+                                <strong>Return</strong>
+                            }
+                            else
+                            {
+                                <strong>Receive</strong>
+                            }
+
+                        </td>
+                        <td>
+                            @if (!item.isReturn)
+                            {
+                                <button class="btn btn-success btn-accept-provide" data-id="@item.id">Đồng ý</button>
+                            }
+                            <button class="btn btn-warning btn-cancel-provide" data-id="@item.id">Hủy</button>
+                        </td>
+                    </tr>
+
+                }
+                else if (User.IsInRole("admin") && item.timeCompletion == null)
+                {
+                    <tr id="@(String.Format("{0}{1}", item.id, "request"))">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.username)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.fullname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.idProduct)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.nameProduct)
+                        </td>
+                        <td>
+
+                            @Html.DisplayFor(modelItem => item.timeRequest)
+                        </td>
+                        <td>
+                            @if (@item.isReturn)
+                            {
+                                <strong>Receive</strong>
+                            }
+                            else
+                            {
+                                <strong>Send</strong>
+                            }
+
+                        </td>
+                        <td>
+                            @if (!item.isReturn)
+                            {
+                                <button class="btn btn-primary btn-accept-provide" data-id="@item.id">Accept</button>
+                            }
+                            else if (item.isReturn && User.IsInRole("admin"))
+                            {
+                                <button class="btn btn-primary btn-return-request" data-id="@item.id">Accept</button>
+                            }
+
+                            <button class="btn btn-cancel-provide" data-id="@item.id">Cancel</button>
+                        </td>
+
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<div class="modal" id="accept-request">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm to accept the request</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                Are you sure that you want to confirm request with id <strong id="id-request-accept"> </strong>?
+
+                <div id="message-request-accept"></div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <input type="hidden" name='id' id="id-accept">
+                <button type="button" class="btn btn-primary" id="btn-accept-request">Accept</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="cancel-request">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Confirm to cancel request</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                Are you sure that you want to cancel request with id<strong id="id-request-cancel"> </strong>?
+
+                <div id="message-request-cancel"></div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <input type="hidden" name='id' id="id-cancel">
+                <button type="button" class="btn btn-danger" id="btn-cancel-request">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (User.IsInRole("admin"))
+{
+
+    <div class="modal" id="accept-return">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Xác nhận đã nhận thiết bị</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Bạn xác nhận yêu cầu mã <strong id="id-request-return"> </strong> hay không?
+
+                    <div id="message-request-return"></div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <input type="hidden" name='id' id="id-accept-return">
+                    <button type="button" class="btn btn-success" id="btn-accept-return-request">Chấp nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<script>$(document).ready(function () {
+        function animateValue(id, start, end, duration) {
+            if (start === end) return;
+            var range = end - start;
+            var current = start;
+            var increment = end > start ? 1 : -1;
+            var stepTime = Math.abs(Math.floor(duration / range));
+            var obj = document.getElementById(id);
+            var timer = setInterval(function () {
+                current += increment;
+                obj.innerHTML = current;
+                if (current == end) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+        function setTotal() {
+            var oTable = $("#tableRequest").DataTable();
+            var info = oTable.page.info();
+            var count = info.recordsDisplay;
+            animateValue("req_total", -100, count, 100);
+           
+        }
+    setTotal();
+    });</script>
